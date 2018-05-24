@@ -8,13 +8,13 @@
 class AlgoritmoGenetico
 {
 public:
-    AlgoritmoGenetico(double txcrossover, double txmutacao, Populacao populacao);
+    AlgoritmoGenetico(double tx_crossover, double tx_mutacao, Populacao populacao);
     void executar(int geracoes);
     void print();
 
 private:
-    double txcrossover;
-    double txmutacao;
+    double tx_crossover;
+    double tx_mutacao;
     std::vector<Populacao> populacoes;
 };
 

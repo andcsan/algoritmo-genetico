@@ -7,10 +7,10 @@
 #include <cmath>
 
 // Construtor
-AlgoritmoGenetico::AlgoritmoGenetico(double txcrossover, double txmutacao, Populacao populacao)
+AlgoritmoGenetico::AlgoritmoGenetico(double tx_crossover, double tx_mutacao, Populacao populacao)
 {
-    this->txcrossover = txcrossover;
-    this->txmutacao = txmutacao;
+    this->tx_crossover = tx_crossover;
+    this->tx_mutacao = tx_mutacao;
     this->populacoes.push_back(populacao);
 }
 
@@ -27,10 +27,35 @@ void AlgoritmoGenetico::executar(int geracoes)
 
         for (int i = 0; i < ultimaPopulacao.get_tamanho() / 2; i++)
         {
+            int pai = ultimosIndividuos[rand() % ultimaPopulacao.get_tamanho()];
+            int mae = ultimosIndividuos[rand() % ultimaPopulacao.get_tamanho()];
+
+            filhos[0] = pai + floor(mae * (rand() % 2) * tx_crossover);
+            filhos[1] = mae + floor(pai * (rand() % 2) * tx_crossover);
+
+            for (int j = 0; j < 2; j++)
+            {
+                if (filhos[j] > 100)
+                {
+                    filhos[j] = 100;
+                }
+
+                if (rand() % 100 < tx_mutacao)
+                {
+                    filhos[j] = rand() % 100;
+                }
+            }
+
+            novaPopulacao.add_individuo(filhos[0]);
+            novaPopulacao.add_individuo(filhos[1]);
+
             // Selecionar os pais e fazer o crossover
             // Mutar os filhos
             // Adicionar os filhos na nova população
         }
+
+        novaPopulacao.sort();
+        populacoes.push_back(novaPopulacao);
     }
 }
 
