@@ -1,6 +1,13 @@
 #include "utils.h"
 
-bool compare_int(int a, int b)
+int const binario_para_decimal(std::vector<bool> bits)
 {
-    return a < b;
+    int decimal = 0;
+
+    for (std::vector<bool>::iterator it = bits.begin(); it != bits.end(); ++it)
+    {
+        *it ? decimal = (decimal << 1) + 1 : decimal <<= 1;
+    }
+
+    return decimal;
 }

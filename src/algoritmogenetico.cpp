@@ -19,42 +19,21 @@ void AlgoritmoGenetico::executar(int geracoes)
 {
     for (int i = 0; i < geracoes; i++)
     {
-        Populacao ultimaPopulacao = populacoes[populacoes.size() - 1];
-        std::vector<int> ultimosIndividuos = ultimaPopulacao.get_individuos();
+        std::vector<Individuo> ultima_geracao = populacoes[populacoes.size() - 1].get_individuos();
+
         Populacao novaPopulacao = Populacao();
 
-        std::array<int, 2> filhos;
+        std::array<Individuo, 2> filhos;
 
-        for (int i = 0; i < ultimaPopulacao.get_tamanho() / 2; i++)
+        for (int i = 0; i < ultima_geracao.size() / 2; i++)
         {
-            int pai = ultimosIndividuos[rand() % ultimaPopulacao.get_tamanho()];
-            int mae = ultimosIndividuos[rand() % ultimaPopulacao.get_tamanho()];
-
-            filhos[0] = pai + floor(mae * (rand() % 2) * tx_crossover);
-            filhos[1] = mae + floor(pai * (rand() % 2) * tx_crossover);
-
-            for (int j = 0; j < 2; j++)
-            {
-                if (filhos[j] > 100)
-                {
-                    filhos[j] = 100;
-                }
-
-                if (rand() % 100 < tx_mutacao)
-                {
-                    filhos[j] = rand() % 100;
-                }
-            }
-
-            novaPopulacao.add_individuo(filhos[0]);
-            novaPopulacao.add_individuo(filhos[1]);
-
             // Selecionar os pais e fazer o crossover
             // Mutar os filhos
             // Adicionar os filhos na nova população
         }
 
         novaPopulacao.sort();
+
         populacoes.push_back(novaPopulacao);
     }
 }

@@ -15,16 +15,16 @@ Populacao::Populacao(int tamanho)
 
     for (int i = 0; i < tamanho; i++)
     {
-        individuos.push_back(rand() % 100);
+        individuos.push_back(Individuo(16, 8));
     }
 }
 
-std::vector<int> Populacao::get_individuos()
+std::vector<Individuo> Populacao::get_individuos()
 {
     return individuos;
 }
 
-void Populacao::set_individuos(std::vector<int> individuos)
+void Populacao::set_individuos(std::vector<Individuo> individuos)
 {
     this->individuos = individuos;
 }
@@ -40,26 +40,27 @@ double Populacao::get_fitness()
 
     for (int i = 0; i < individuos.size(); i++)
     {
-        fitness += individuos[i];
+        fitness += individuos[i].fitness();
     }
 
     return fitness / individuos.size();
 }
 
-void Populacao::add_individuo(int individuo)
+void Populacao::add_individuo(Individuo individuo)
 {
     individuos.push_back(individuo);
 }
 
+// Indivíduos mais aptos primeiro
 void Populacao::sort()
 {
-    std::sort(individuos.begin(), individuos.end(), compare_int);
+    std::sort(individuos.begin(), individuos.end(), Individuo::comparar);
 }
 
 void Populacao::print()
 {
     for (int i = 0; i < individuos.size(); i++)
     {
-        std::cout << individuos[i] << " " << std::endl;
+        std::cout << individuos[i].fitness() << " " << std::endl;
     }
 }
