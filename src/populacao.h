@@ -12,6 +12,7 @@ public:
 
     // setters
     void set_individuos(std::vector<Individuo> individuos);
+    void set_geracao(int geracao);
 
     // getters
     std::vector<Individuo> get_individuos();
@@ -24,6 +25,7 @@ public:
     void print();
 
 private:
+    int geracao;
     std::vector<Individuo> individuos; // População de indivíduos
 };
 

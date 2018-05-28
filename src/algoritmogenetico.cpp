@@ -19,16 +19,14 @@ AlgoritmoGenetico::AlgoritmoGenetico(double tx_crossover, double tx_mutacao, Pop
 // Executa x gerações da última população
 void AlgoritmoGenetico::executar(int geracoes)
 {
+    populacoes.front().print();
+
     for (int i = 0; i < geracoes; i++)
     {
         Populacao novaPopulacao = proxima_geracao(populacoes[populacoes.size() - 1]);
+        novaPopulacao.set_geracao(i + 1);
+        novaPopulacao.print();
         populacoes.push_back(novaPopulacao);
-        std::cout << std::right;
-        std::cout << "Geração " << std::setfill('0') << std::setw(3) << i + 1;
-        std::cout << " - Fitness: " << std::setfill('0') << std::setw(6) << std::setprecision(2) << novaPopulacao.get_fitness();
-        std::cout << " - Melhor indivíduo: ";
-        novaPopulacao.get_individuos()[0].print();
-        std::cout << std::endl;
     }
 }
 

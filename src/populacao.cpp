@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <iomanip>
 
 Populacao::Populacao()
 {
@@ -17,16 +18,23 @@ Populacao::Populacao(int tamanho)
     {
         individuos.push_back(Individuo(8, 4));
     }
-}
 
-std::vector<Individuo> Populacao::get_individuos()
-{
-    return individuos;
+    sort();
 }
 
 void Populacao::set_individuos(std::vector<Individuo> individuos)
 {
     this->individuos = individuos;
+}
+
+void Populacao::set_geracao(int geracao)
+{
+    this->geracao = geracao;
+}
+
+std::vector<Individuo> Populacao::get_individuos()
+{
+    return individuos;
 }
 
 int Populacao::get_tamanho()
@@ -59,8 +67,10 @@ void Populacao::sort()
 
 void Populacao::print()
 {
-    for (int i = 0; i < individuos.size(); i++)
-    {
-        std::cout << individuos[i].fitness();
-    }
+    std::cout << std::right;
+    std::cout << "Geração " << std::setfill('0') << std::setw(3) << geracao;
+    std::cout << " - Fitness: " << std::setfill('0') << std::setw(6) << get_fitness();
+    std::cout << " - Melhor indivíduo: ";
+    get_individuos()[0].print();
+    std::cout << std::endl;
 }

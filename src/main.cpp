@@ -12,6 +12,7 @@ int main()
 
     // Cria população inicial com 100 indivíduos
     Populacao populacao = Populacao(100);
+    populacao.set_geracao(0);
 
     // Algoritmo genético com 0.7 de taxa de crossover e 0.01 de taxa de mutação
     AlgoritmoGenetico ag = AlgoritmoGenetico(0.75, 0.05, populacao);
