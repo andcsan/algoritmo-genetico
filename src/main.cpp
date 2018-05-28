@@ -14,7 +14,7 @@ int main()
     Populacao populacao = Populacao(100);
 
     // Algoritmo genético com 0.7 de taxa de crossover e 0.01 de taxa de mutação
-    AlgoritmoGenetico ag = AlgoritmoGenetico(0.7, 0.01, populacao);
+    AlgoritmoGenetico ag = AlgoritmoGenetico(0.75, 0.05, populacao);
 
     // Executa 100 gerações
     ag.executar(100);

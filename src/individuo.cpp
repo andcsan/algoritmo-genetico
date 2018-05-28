@@ -45,6 +45,17 @@ bool Individuo::get_gene(int posicao)
     return this->cromossomo.at(posicao);
 }
 
+void Individuo::mutar()
+{
+    int posicao = rand() % this->cromossomo.size();
+    this->mutar_gene(posicao);
+}
+
+void Individuo::mutar_gene(int posicao)
+{
+    this->cromossomo[posicao] = !this->cromossomo[posicao];
+}
+
 std::vector<int> Individuo::numerico()
 {
     std::vector<int> cromossomo_numerico(genes);
@@ -87,13 +98,13 @@ void Individuo::print()
             std::cout << bit << " ";
         }
     }
-    std::cout << "]";
-    std::cout << "[";
-    for (auto const &numero : this->numerico())
-    {
-        std::cout << numero << " ";
-    }
-    std::cout << "]";
+    std::cout << "]" << std::endl;
+    // std::cout << "[";
+    // for (auto const &numero : this->numerico())
+    // {
+    //     std::cout << numero << " ";
+    // }
+    // std::cout << "]";
 }
 
 bool Individuo::comparar(Individuo a, Individuo b)

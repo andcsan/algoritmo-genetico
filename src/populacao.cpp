@@ -15,7 +15,7 @@ Populacao::Populacao(int tamanho)
 
     for (int i = 0; i < tamanho; i++)
     {
-        individuos.push_back(Individuo(16, 8));
+        individuos.push_back(Individuo(8, 4));
     }
 }
 

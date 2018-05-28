@@ -19,6 +19,7 @@ public:
     bool get_gene(int posicao);
 
     // métodos
+    void mutar();
     void mutar_gene(int posicao);
     std::vector<int> numerico(); // Representação numérica do indivíduo
     int fitness();

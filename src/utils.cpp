@@ -1,4 +1,10 @@
 #include "utils.h"
+#include <cstdlib>
+
+double random_double()
+{
+    return (double)rand() / (double)RAND_MAX;
+}
 
 int const binario_para_decimal(std::vector<bool> bits)
 {

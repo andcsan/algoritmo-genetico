@@ -9,13 +9,19 @@ class AlgoritmoGenetico
 {
 public:
     AlgoritmoGenetico(double tx_crossover, double tx_mutacao, Populacao populacao);
+
+    Populacao proxima_geracao(Populacao populacao);
+    Individuo torneio(std::vector<Individuo> individuos);
+    Individuo mutar(Individuo individuo);
+    std::array<Individuo, 2> selecionar_pais(std::vector<Individuo> individuos);
+    std::array<Individuo, 2> crossover(Individuo a, Individuo b);
     void executar(int geracoes);
     void print();
 
 private:
-    double tx_crossover;
-    double tx_mutacao;
-    std::vector<Populacao> populacoes;
+    double tx_crossover;               // Probabilidade de ocorrência de crossover
+    double tx_mutacao;                 // Probabilidade de ocorrência de mutação
+    std::vector<Populacao> populacoes; // Todas as populações geradas
 };
 
 #endif
