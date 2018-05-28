@@ -18,7 +18,6 @@ int main()
 
     // Executa 100 gerações
     ag.executar(100);
-    ag.print();
 
     return 0;
 }

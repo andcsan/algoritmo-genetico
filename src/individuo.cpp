@@ -98,7 +98,7 @@ void Individuo::print()
             std::cout << bit << " ";
         }
     }
-    std::cout << "]" << std::endl;
+    std::cout << "]";
     // std::cout << "[";
     // for (auto const &numero : this->numerico())
     // {

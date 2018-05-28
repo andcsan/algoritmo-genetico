@@ -6,6 +6,7 @@
 #include <iostream>
 #include <array>
 #include <cmath>
+#include <iomanip>
 
 // Construtor
 AlgoritmoGenetico::AlgoritmoGenetico(double tx_crossover, double tx_mutacao, Populacao populacao)
@@ -22,6 +23,12 @@ void AlgoritmoGenetico::executar(int geracoes)
     {
         Populacao novaPopulacao = proxima_geracao(populacoes[populacoes.size() - 1]);
         populacoes.push_back(novaPopulacao);
+        std::cout << std::right;
+        std::cout << "Geração " << std::setfill('0') << std::setw(3) << i + 1;
+        std::cout << " - Fitness: " << std::setfill('0') << std::setw(6) << std::setprecision(2) << novaPopulacao.get_fitness();
+        std::cout << " - Melhor indivíduo: ";
+        novaPopulacao.get_individuos()[0].print();
+        std::cout << std::endl;
     }
 }
 

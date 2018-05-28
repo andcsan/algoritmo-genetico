@@ -61,6 +61,6 @@ void Populacao::print()
 {
     for (int i = 0; i < individuos.size(); i++)
     {
-        std::cout << individuos[i].fitness() << " " << std::endl;
+        std::cout << individuos[i].fitness();
     }
 }
