@@ -93,13 +93,13 @@ std::array<Individuo, 2> AlgoritmoGenetico::crossover(Individuo a, Individuo b)
         {
             if (rand() % 2 == 0)
             {
-                crossover[0].set_gene(posicao, b.get_gene(posicao));
-                crossover[1].set_gene(posicao, a.get_gene(posicao));
+                crossover[0].set_bit(posicao, b.get_bit(posicao));
+                crossover[1].set_bit(posicao, a.get_bit(posicao));
             }
             else
             {
-                crossover[0].set_gene(posicao, b.get_gene(posicao));
-                crossover[1].set_gene(posicao, a.get_gene(posicao));
+                crossover[0].set_bit(posicao, b.get_bit(posicao));
+                crossover[1].set_bit(posicao, a.get_bit(posicao));
             }
         }
     }

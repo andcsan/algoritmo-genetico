@@ -30,7 +30,7 @@ void Individuo::set_cromossomo(std::vector<bool> cromossomo)
     this->cromossomo = cromossomo;
 }
 
-void Individuo::set_gene(int posicao, bool value)
+void Individuo::set_bit(int posicao, bool value)
 {
     this->cromossomo[posicao] = value;
 }
@@ -40,7 +40,7 @@ std::vector<bool> Individuo::get_cromossomo()
     return this->cromossomo;
 }
 
-bool Individuo::get_gene(int posicao)
+bool Individuo::get_bit(int posicao)
 {
     return this->cromossomo.at(posicao);
 }
@@ -48,15 +48,15 @@ bool Individuo::get_gene(int posicao)
 void Individuo::mutar()
 {
     int posicao = rand() % this->cromossomo.size();
-    this->mutar_gene(posicao);
+    this->mutar_bit(posicao);
 }
 
-void Individuo::mutar_gene(int posicao)
+void Individuo::mutar_bit(int posicao)
 {
     this->cromossomo[posicao] = !this->cromossomo[posicao];
 }
 
-std::vector<int> Individuo::numerico()
+std::vector<int> Individuo::cromossomo_numerico()
 {
     std::vector<int> cromossomo_numerico(genes);
     std::vector<bool> gene(bits_por_gene);
@@ -76,12 +76,12 @@ std::vector<int> Individuo::numerico()
 
 int Individuo::fitness()
 {
-    std::vector<int> numerico = this->numerico();
+    std::vector<int> cromossomo_numerico = this->cromossomo_numerico();
     int fitness = 0;
 
     for (int i = 0; i < genes; i++)
     {
-        fitness += numerico[i];
+        fitness += cromossomo_numerico[i];
     }
 
     return fitness;
@@ -90,21 +90,15 @@ int Individuo::fitness()
 void Individuo::print()
 {
     std::cout << std::fixed << std::setprecision(2) << std::left;
-
-    std::cout << "[ ";
-    for (auto const &bit : this->cromossomo)
+    std::cout << "| ";
+    for (int gene = 0; gene < genes; gene++)
     {
+        for (int bit = 0; bit < bits_por_gene; bit++)
         {
-            std::cout << bit << " ";
+            std::cout << this->cromossomo[gene * bits_por_gene + bit] << " ";
         }
+        std::cout << "| ";
     }
-    std::cout << "]";
-    // std::cout << "[";
-    // for (auto const &numero : this->numerico())
-    // {
-    //     std::cout << numero << " ";
-    // }
-    // std::cout << "]";
 }
 
 bool Individuo::comparar(Individuo a, Individuo b)
