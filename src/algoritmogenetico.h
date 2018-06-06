@@ -14,7 +14,9 @@ public:
     Individuo torneio(std::vector<Individuo> individuos);
     Individuo mutar(Individuo individuo);
     std::array<Individuo, 2> selecionar_pais(std::vector<Individuo> individuos);
-    std::array<Individuo, 2> crossover(Individuo a, Individuo b);
+    std::array<Individuo, 2> crossover(Individuo a, Individuo b, std::string tipo);
+    std::array<Individuo, 2> crossover_uniforme(Individuo a, Individuo b);
+    std::array<Individuo, 2> crossover_um_ponto(Individuo a, Individuo b);
     void executar(int geracoes);
     void print();
 

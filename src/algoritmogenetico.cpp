@@ -43,7 +43,7 @@ Populacao AlgoritmoGenetico::proxima_geracao(Populacao populacao)
     for (int i = 0; i < individuos.size() / 2; i++)
     {
         pais = selecionar_pais(individuos);
-        filhos = crossover(pais[0], pais[1]);
+        filhos = crossover(pais[0], pais[1], "um_ponto");
         filhos[0] = mutar(filhos[0]);
         filhos[1] = mutar(filhos[1]);
         proxima_geracao.add_individuo(filhos[0]);
@@ -80,26 +80,58 @@ Individuo AlgoritmoGenetico::torneio(std::vector<Individuo> individuos)
 }
 
 // Cruzamento uniforme dos individuos aplicando a probabilidade de crossover
-std::array<Individuo, 2> AlgoritmoGenetico::crossover(Individuo a, Individuo b)
+std::array<Individuo, 2> AlgoritmoGenetico::crossover(Individuo a, Individuo b, std::string tipo)
+{
+    if (random_double() < tx_crossover)
+    {
+        if (tipo == "uniforme")
+        {
+            return crossover_uniforme(a, b);
+        }
+
+        if (tipo == "um_ponto")
+        {
+            return crossover_um_ponto(a, b);
+        }
+    }
+
+    // Se não ocorrer crossover, retorna os pais sem alteração
+    return std::array<Individuo, 2>{a, b};
+}
+
+std::array<Individuo, 2> AlgoritmoGenetico::crossover_uniforme(Individuo a, Individuo b)
 {
     std::array<Individuo, 2> crossover = {a, b};
 
-    if (random_double() < tx_crossover)
+    // Crossover uniforme
+    for (int posicao = 0; posicao < a.get_cromossomo().size(); posicao++)
     {
-        // Crossover uniforme
-        for (int posicao = 0; posicao < a.get_cromossomo().size(); posicao++)
+        if (rand() % 2 == 0)
         {
-            if (rand() % 2 == 0)
-            {
-                crossover[0].set_bit(posicao, b.get_bit(posicao));
-                crossover[1].set_bit(posicao, a.get_bit(posicao));
-            }
-            else
-            {
-                crossover[0].set_bit(posicao, b.get_bit(posicao));
-                crossover[1].set_bit(posicao, a.get_bit(posicao));
-            }
+            crossover[0].set_bit(posicao, b.get_bit(posicao));
+            crossover[1].set_bit(posicao, a.get_bit(posicao));
         }
+        else
+        {
+            crossover[0].set_bit(posicao, b.get_bit(posicao));
+            crossover[1].set_bit(posicao, a.get_bit(posicao));
+        }
+    }
+
+    return crossover;
+}
+
+std::array<Individuo, 2> AlgoritmoGenetico::crossover_um_ponto(Individuo a, Individuo b)
+{
+    std::array<Individuo, 2> crossover = {a, b};
+
+    // Crossover um ponto
+    int posicao = rand() % a.get_cromossomo().size();
+
+    for (int i = 0; i < posicao; i++)
+    {
+        crossover[0].set_bit(i, b.get_bit(i));
+        crossover[1].set_bit(i, a.get_bit(i));
     }
 
     return crossover;
