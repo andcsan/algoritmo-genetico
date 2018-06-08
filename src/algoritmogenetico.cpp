@@ -43,7 +43,7 @@ Populacao AlgoritmoGenetico::proxima_geracao(Populacao populacao)
     for (int i = 0; i < individuos.size() / 2; i++)
     {
         pais = selecionar_pais(individuos);
-        filhos = crossover(pais[0], pais[1], "um_ponto");
+        filhos = crossover(pais[0], pais[1], "dois_pontos");
         filhos[0] = mutar(filhos[0]);
         filhos[1] = mutar(filhos[1]);
         proxima_geracao.add_individuo(filhos[0]);
@@ -93,6 +93,11 @@ std::array<Individuo, 2> AlgoritmoGenetico::crossover(Individuo a, Individuo b, 
         {
             return crossover_um_ponto(a, b);
         }
+
+        if (tipo == "dois_pontos")
+        {
+            return crossover_dois_pontos(a, b);
+        }
     }
 
     // Se não ocorrer crossover, retorna os pais sem alteração
@@ -121,14 +126,41 @@ std::array<Individuo, 2> AlgoritmoGenetico::crossover_uniforme(Individuo a, Indi
     return crossover;
 }
 
+// Crossover um ponto
 std::array<Individuo, 2> AlgoritmoGenetico::crossover_um_ponto(Individuo a, Individuo b)
 {
     std::array<Individuo, 2> crossover = {a, b};
 
-    // Crossover um ponto
     int posicao = rand() % a.get_cromossomo().size();
 
+    // Na posição aleatória escolhida, troca os bits dos pais
     for (int i = 0; i < posicao; i++)
+    {
+        crossover[0].set_bit(i, b.get_bit(i));
+        crossover[1].set_bit(i, a.get_bit(i));
+    }
+
+    return crossover;
+}
+
+// Crossover dois pontos, semelhante ao um ponto, mas com dois pontos de troca
+std::array<Individuo, 2> AlgoritmoGenetico::crossover_dois_pontos(Individuo a, Individuo b)
+{
+    std::array<Individuo, 2> crossover = {a, b};
+
+    int posicao1 = rand() % a.get_cromossomo().size();
+    int posicao2 = rand() % a.get_cromossomo().size();
+
+    // Ordena as posições para que a menor seja a primeira
+    if (posicao1 > posicao2)
+    {
+        int aux = posicao1;
+        posicao1 = posicao2;
+        posicao2 = aux;
+    }
+
+    // Na posição aleatória escolhida, troca os bits dos pais
+    for (int i = posicao1; i < posicao2; i++)
     {
         crossover[0].set_bit(i, b.get_bit(i));
         crossover[1].set_bit(i, a.get_bit(i));
