@@ -27,7 +27,12 @@ public:
     // Cromossomo em representação numérica, isto é, vetor dos genes representados por número inteiro
     std::vector<int> cromossomo_numerico();
 
-    static bool comparar(Individuo a, Individuo b);
+    // Comparação de indivíduos por aptidão (melhor fitness)
+    static bool comparar_aptidao(Individuo a, Individuo b);
+
+    // Operadores
+    bool operator<(const Individuo &ob) const;
+    bool operator==(const Individuo &ob) const;
 
 private:
     std::vector<bool> cromossomo; // lista de bits que representa o indivíduo

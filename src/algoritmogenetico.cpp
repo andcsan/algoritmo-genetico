@@ -9,10 +9,16 @@
 #include <iomanip>
 
 // Construtor
-AlgoritmoGenetico::AlgoritmoGenetico(double tx_crossover, double tx_mutacao, Populacao populacao)
+AlgoritmoGenetico::AlgoritmoGenetico(double tx_crossover,
+                                     double tx_mutacao,
+                                     Populacao populacao,
+                                     std::string algoritmo_selecao,
+                                     std::string algoritmo_crossover)
 {
     this->tx_crossover = tx_crossover;
     this->tx_mutacao = tx_mutacao;
+    this->algoritmo_crossover = algoritmo_crossover;
+    this->algoritmo_selecao = algoritmo_selecao;
     this->populacoes.push_back(populacao);
 }
 
@@ -33,41 +39,47 @@ void AlgoritmoGenetico::executar(int geracoes)
 // Calcula a proxima geração de uma população
 Populacao AlgoritmoGenetico::proxima_geracao(Populacao populacao)
 {
-    std::vector<Individuo> individuos = populacao.get_individuos();
-
-    Populacao proxima_geracao = Populacao();
-
     std::array<Individuo, 2> pais;
     std::array<Individuo, 2> filhos;
+    std::vector<Individuo> novosIndividuos;
 
-    for (int i = 0; i < individuos.size() / 2; i++)
+    for (int i = 0; i < populacao.tamanho() / 2; i++)
     {
-        pais = selecionar_pais(individuos);
-        filhos = crossover(pais[0], pais[1], "dois_pontos");
+        pais = selecionar_pais(populacao, algoritmo_selecao);
+        filhos = crossover(pais[0], pais[1], algoritmo_crossover);
         filhos[0] = mutar(filhos[0]);
         filhos[1] = mutar(filhos[1]);
-        proxima_geracao.add_individuo(filhos[0]);
-        proxima_geracao.add_individuo(filhos[1]);
+        novosIndividuos.push_back(filhos[0]);
+        novosIndividuos.push_back(filhos[1]);
     }
 
-    // Ordena a próxima geração pelo individuo com maior fitness
-    proxima_geracao.sort();
-
-    return proxima_geracao;
+    return Populacao(novosIndividuos);
 }
 
-// Seleciona os pais para o crossover com algoritmo de torneio
-std::array<Individuo, 2> AlgoritmoGenetico::selecionar_pais(std::vector<Individuo> individuos)
+// Seleciona os pais para o crossover de acordo com o algoritmo de seleção
+std::array<Individuo, 2> AlgoritmoGenetico::selecionar_pais(Populacao populacao, std::string algoritmo)
 {
-    Individuo candidato1 = torneio(individuos);
-    Individuo candidato2 = torneio(individuos);
+    std::array<Individuo, 2> pais;
 
-    return std::array<Individuo, 2>{candidato1, candidato2};
+    if (algoritmo == "torneio")
+    {
+        pais[0] = selecao_torneio(populacao);
+        pais[1] = selecao_torneio(populacao);
+    }
+    else if (algoritmo == "roleta")
+    {
+        pais[0] = selecao_roleta(populacao);
+        pais[1] = selecao_roleta(populacao);
+    }
+
+    return pais;
 }
 
-// Seleciona dois individuos aleatórios da população e retorna o com melhor fitness
-Individuo AlgoritmoGenetico::torneio(std::vector<Individuo> individuos)
+// Seleciona dois individuos aleatórios da população e retorna o mais apto
+Individuo AlgoritmoGenetico::selecao_torneio(Populacao populacao)
 {
+    std::vector<Individuo> individuos = populacao.get_individuos();
+
     Individuo a = individuos[rand() % individuos.size()];
     Individuo b = individuos[rand() % individuos.size()];
 
@@ -79,22 +91,44 @@ Individuo AlgoritmoGenetico::torneio(std::vector<Individuo> individuos)
     return b;
 }
 
-// Cruzamento uniforme dos individuos aplicando a probabilidade de crossover
-std::array<Individuo, 2> AlgoritmoGenetico::crossover(Individuo a, Individuo b, std::string tipo)
+// Seleciona um indivíduo com base na roleta
+Individuo AlgoritmoGenetico::selecao_roleta(Populacao populacao)
+{
+    std::vector<Individuo> individuos = populacao.get_individuos();
+    std::map<Individuo, std::pair<double, double>> roleta = populacao.get_roleta();
+    Individuo individuo;
+
+    double valor = random_double();
+
+    // Busca na roleta o individuo que corresponde ao intervalo do valor aleatório gerado
+    for (auto it = roleta.begin(); it != roleta.end(); it++)
+    {
+        if (valor >= it->second.first && valor < it->second.second)
+        {
+            individuo = it->first;
+            break;
+        }
+    }
+
+    return individuo;
+}
+
+// Cruzamento dos indivíduos aplicando a probabilidade de crossover e o algoritmo de crossover
+std::array<Individuo, 2> AlgoritmoGenetico::crossover(Individuo a, Individuo b, std::string algoritmo)
 {
     if (random_double() < tx_crossover)
     {
-        if (tipo == "uniforme")
+        if (algoritmo == "uniforme")
         {
             return crossover_uniforme(a, b);
         }
 
-        if (tipo == "um_ponto")
+        if (algoritmo == "um_ponto")
         {
             return crossover_um_ponto(a, b);
         }
 
-        if (tipo == "dois_pontos")
+        if (algoritmo == "dois_pontos")
         {
             return crossover_dois_pontos(a, b);
         }
@@ -104,6 +138,7 @@ std::array<Individuo, 2> AlgoritmoGenetico::crossover(Individuo a, Individuo b, 
     return std::array<Individuo, 2>{a, b};
 }
 
+// Crossover uniforme
 std::array<Individuo, 2> AlgoritmoGenetico::crossover_uniforme(Individuo a, Individuo b)
 {
     std::array<Individuo, 2> crossover = {a, b};
@@ -184,6 +219,6 @@ void AlgoritmoGenetico::print()
 {
     for (int i = 0; i < populacoes.size(); i++)
     {
-        std::cout << "Geração " << i << ": " << populacoes[i].get_fitness() << std::endl;
+        std::cout << "Geração " << i << " - Média fitness: " << populacoes[i].media_fitness() << std::endl;
     }
 }

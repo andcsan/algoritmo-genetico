@@ -2,13 +2,15 @@
 #define POPULACAO_H
 
 #include <vector>
+#include <map>
 #include "individuo.h"
 
 class Populacao
 {
 public:
-    Populacao();
-    Populacao(int tamanho);
+    Populacao();                                  // População vazia
+    Populacao(int tamanho);                       // População aleatória com x indivíduos
+    Populacao(std::vector<Individuo> individuos); // População criada com indivíduos passados por parâmetro
 
     // setters
     void set_individuos(std::vector<Individuo> individuos);
@@ -16,16 +18,20 @@ public:
 
     // getters
     std::vector<Individuo> get_individuos();
-    int get_tamanho();
-    double get_fitness();
+    std::map<Individuo, std::pair<double, double>> get_roleta();
 
     // métodos
-    void add_individuo(Individuo individuo);
-    void sort();
+    double fitness();       // Soma do fitness de todos os invidíduos
+    double media_fitness(); // Média do fitness dos indivíduos
+    int tamanho();
+    void ordenar();
+    void atualizar();
+    void atualizar_roleta();
     void print();
 
 private:
     int geracao;
+    std::map<Individuo, std::pair<double, double>> roleta;
     std::vector<Individuo> individuos; // População de indivíduos
 };
 

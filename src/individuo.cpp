@@ -91,17 +91,47 @@ void Individuo::print()
 {
     std::cout << std::fixed << std::setprecision(2) << std::left;
     std::cout << "| ";
+
     for (int gene = 0; gene < genes; gene++)
     {
         for (int bit = 0; bit < bits_por_gene; bit++)
         {
             std::cout << this->cromossomo[gene * bits_por_gene + bit] << " ";
         }
+
         std::cout << "| ";
     }
 }
 
-bool Individuo::comparar(Individuo a, Individuo b)
+bool Individuo::comparar_aptidao(Individuo a, Individuo b)
 {
     return a.fitness() < b.fitness();
+}
+
+bool Individuo::operator<(const Individuo &ob) const
+{
+    for (int i = 0; i < cromossomo.size(); i++)
+    {
+        if (cromossomo[i] == ob.cromossomo[i])
+        {
+            continue;
+        }
+
+        return !cromossomo[i];
+    }
+}
+
+bool Individuo::operator==(const Individuo &ob) const
+{
+    for (int i = 0; i < cromossomo.size(); i++)
+    {
+        if (cromossomo[i] == ob.cromossomo[i])
+        {
+            continue;
+        }
+
+        return false;
+    }
+
+    return true;
 }

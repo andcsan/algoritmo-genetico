@@ -11,14 +11,14 @@ int main()
     std::cout << "Algoritmo genético" << std::endl;
 
     // Cria população inicial com 100 indivíduos
-    Populacao populacao = Populacao(100);
-    populacao.set_geracao(0);
+    Populacao populacao_inicial = Populacao(100);
+    populacao_inicial.set_geracao(0);
 
-    // Algoritmo genético com 0.7 de taxa de crossover e 0.01 de taxa de mutação
-    AlgoritmoGenetico ag = AlgoritmoGenetico(0.75, 0.05, populacao);
+    // Cria uma instância do algoritmo genético
+    AlgoritmoGenetico ag = AlgoritmoGenetico(0.85, 0.005, populacao_inicial, "roleta", "dois_pontos");
 
     // Executa 100 gerações
-    ag.executar(100);
+    ag.executar(5000);
 
     return 0;
 }
